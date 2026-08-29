@@ -32,52 +32,48 @@
 //
 ////////////////////////////////////////////////////////////////////
 
-// Base class for NTL hint instructions
-def template NTLDeclare {{
-    /**
-     * Static instruction class for "%(mnemonic)s".
-     */
-    class %(class_name)s : public %(base_class)s
-    {
-      private:
-        %(reg_idx_arr_decl)s;
-
-      public:
-        /// Constructor.
-        %(class_name)s(ExtMachInst machInst);
-
-        Fault execute(ExecContext *, trace::InstRecord *) const override;
-    };
-}};
-
-def template NTLConstructor {{
-    %(class_name)s::%(class_name)s(ExtMachInst machInst):
-        %(base_class)s("%(mnemonic)s", machInst, No_OpClass)
-    {
-        %(set_reg_idx_arr)s;
-    }
-}};
-
-def template NTLEmptyExecute {{
-    Fault
-    %(class_name)s::execute(
-        ExecContext *xc, trace::InstRecord *traceData) const
-    {
-        // This is a hint instruction - no architectural state change
-        // The actual functionality is implemented in the base class
-        return NoFault;
-    }
-}};
+// Import required parameters from basic.isa
 
 // Format definition for NTL hint instructions
-def format NTLHint() {{
-    iop = InstObjParams(name, Name, 'NTLInst', {}, [])
+def format NTLHint() {
+    iop = InstObjParams(name, Name, 'NTLInst', '', [])
     
-    return (NTLDeclare.subst(iop),
-            NTLConstructor.subst(iop),
-            BasicDecode.subst(iop),
-            NTLEmptyExecute.subst(iop))
-}};
+    return (
+        """
+        class %(class_name)s : public %(base_class)s
+        {
+          private:
+            %(reg_idx_arr_decl)s;
+
+          public:
+            /// Constructor.
+            %(class_name)s(ExtMachInst machInst);
+            Fault execute(ExecContext *, trace::InstRecord *) const override;
+        };
+        """ % iop,
+        
+        """
+        %(class_name)s::%(class_name)s(ExtMachInst machInst):
+            %(base_class)s("%(mnemonic)s", machInst, No_OpClass)
+        {
+            %(set_reg_idx_arr)s;
+        }
+        """ % iop,
+        
+        BasicDecode.subst(iop),
+        
+        """
+        Fault
+        %(class_name)s::execute(
+            ExecContext *xc, trace::InstRecord *traceData) const
+        {
+            // This is a hint instruction - no architectural state change
+            // The actual functionality is implemented in the base class
+            return NoFault;
+        }
+        """ % iop
+    )
+};
 
 // Zihintntl instruction definitions
 // These are HINT instructions with opcode 0x0F (SYSTEM) and funct3=0x0
@@ -91,7 +87,7 @@ inst NTL_P1 : NTLHint {
     funct3 = 0x0;
     rs1 = 0x0;
     rd = 0x0;
-    hint_type = 0x0;
+    imm = 0x0;
 };
 
 // NTL.PALL - Non-Temporal Load Hint for all caches
@@ -102,7 +98,7 @@ inst NTL_PALL : NTLHint {
     funct3 = 0x0;
     rs1 = 0x0;
     rd = 0x0;
-    hint_type = 0x1;
+    imm = 0x1;
 };
 
 // NTL.S1 - Non-Temporal Store Hint with locality level 1
@@ -113,7 +109,7 @@ inst NTL_S1 : NTLHint {
     funct3 = 0x0;
     rs1 = 0x0;
     rd = 0x0;
-    hint_type = 0x2;
+    imm = 0x2;
 };
 
 // NTL.ALL - Non-Temporal Hint for all subsequent accesses
@@ -124,5 +120,5 @@ inst NTL_ALL : NTLHint {
     funct3 = 0x0;
     rs1 = 0x0;
     rd = 0x0;
-    hint_type = 0x3;
+    imm = 0x3;
 };
