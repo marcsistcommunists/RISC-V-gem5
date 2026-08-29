@@ -131,9 +131,13 @@ def template LoadExecute {{
         %(op_rd)s;
         %(ea_code)s;
 
+        // Apply NTL hint if present
+        Request::Flags flags = memAccessFlags;
+        applyNTLHint(xc, flags);
+
         {
             Fault fault =
-                readMemAtomicLE(xc, traceData, EA, Mem, memAccessFlags);
+                readMemAtomicLE(xc, traceData, EA, Mem, flags);
             if (fault != NoFault)
                 return fault;
         }
@@ -191,9 +195,13 @@ def template StoreExecute {{
 
         %(memacc_code)s;
 
+        // Apply NTL hint if present
+        Request::Flags flags = memAccessFlags;
+        applyNTLHint(xc, flags);
+
         {
             Fault fault =
-                writeMemAtomicLE(xc, traceData, Mem, EA, memAccessFlags,
+                writeMemAtomicLE(xc, traceData, Mem, EA, flags,
                         nullptr);
             if (fault != NoFault)
                 return fault;
@@ -219,9 +227,13 @@ def template StoreInitiateAcc {{
 
         %(memacc_code)s;
 
+        // Apply NTL hint if present
+        Request::Flags flags = memAccessFlags;
+        applyNTLHint(xc, flags);
+
         {
             Fault fault = writeMemTimingLE(xc, traceData, Mem, EA,
-                memAccessFlags, nullptr);
+                flags, nullptr);
             if (fault != NoFault)
                 return fault;
         }

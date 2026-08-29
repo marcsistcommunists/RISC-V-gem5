@@ -174,6 +174,13 @@ class Request : public Extensible<Request>
         /** The request should be marked with RELEASE. */
         RELEASE                     = 0x00040000,
 
+        /**
+         * The request is non-temporal, suggesting that the data accessed
+         * will not be reused soon and should bypass cache or be cached
+         * with lowest priority. Used for Zihintntl instructions.
+         */
+        NON_TEMPORAL                = 0x08000000,
+
         /** The request is an atomic that returns data. */
         ATOMIC_RETURN_OP            = 0x40000000,
         /** The request is an atomic that does not return data. */
