@@ -42,6 +42,7 @@
 ##include "vector_mem.isa"
 ##include "zcmp.isa"
 ##include "zcmt.isa"
+##include "ntl.isa"
 
 // Include formats for nonstandard extensions
 ##include "compressed.isa"

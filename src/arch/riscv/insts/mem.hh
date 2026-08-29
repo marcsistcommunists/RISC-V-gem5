@@ -35,6 +35,7 @@
 #include "arch/riscv/insts/static_inst.hh"
 #include "cpu/exec_context.hh"
 #include "cpu/static_inst.hh"
+#include "mem/request.hh"
 
 namespace gem5
 {
@@ -60,6 +61,12 @@ class Load : public MemInst
 
     std::string generateDisassembly(
         Addr pc, const loader::SymbolTable *symtab) const override;
+    
+    /**
+     * Apply NTL (Non-Temporal Load/Store Hint) flags to memory access.
+     * Checks the MISCREG_NTL_HINT register and sets appropriate flags.
+     */
+    void applyNTLHint(ExecContext *xc, Request::Flags &flags) const;
 };
 
 class Store : public MemInst
@@ -69,6 +76,12 @@ class Store : public MemInst
 
     std::string generateDisassembly(
         Addr pc, const loader::SymbolTable *symtab) const override;
+    
+    /**
+     * Apply NTL (Non-Temporal Load/Store Hint) flags to memory access.
+     * Checks the MISCREG_NTL_HINT register and sets appropriate flags.
+     */
+    void applyNTLHint(ExecContext *xc, Request::Flags &flags) const;
 };
 
 } // namespace RiscvISA

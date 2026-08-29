@@ -292,6 +292,9 @@ enum MiscRegIndex
     MISCREG_HPMCOUNTER31H,
     MISCREG_JVT,
 
+    /** Zihintntl - Non-Temporal Load/Store Hint register */
+    MISCREG_NTL_HINT,
+
     NUM_PHYS_MISCREGS,
     MISCREG_FFLAGS_EXE = NUM_PHYS_MISCREGS,
 
@@ -1321,6 +1324,10 @@ const std::unordered_map<int, CSRMetadata> CSRData = {
     {CSR_VSATP,
         {"vsatp", MISCREG_VSATP, rvTypeFlags(RV64),
         isaExtsFlags('h')}},
+    // Zihintntl - Non-Temporal Load/Store Hint
+    {0x01A,
+        {"ntlhints", MISCREG_NTL_HINT, rvTypeFlags(RV64, RV32),
+        isaExtsFlags('z', 'i', 'h', 'i', 'n', 't', 'n', 't', 'l')}},
 };
 
 /**
