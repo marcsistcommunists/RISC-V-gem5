@@ -32,93 +32,20 @@
 //
 ////////////////////////////////////////////////////////////////////
 
-// Import required parameters from basic.isa
-
 // Format definition for NTL hint instructions
-def format NTLHint() {
-    iop = InstObjParams(name, Name, 'NTLInst', '', [])
-    
-    return (
-        """
-        class %(class_name)s : public %(base_class)s
-        {
-          private:
-            %(reg_idx_arr_decl)s;
-
-          public:
-            /// Constructor.
-            %(class_name)s(ExtMachInst machInst);
-            Fault execute(ExecContext *, trace::InstRecord *) const override;
-        };
-        """ % iop,
-        
-        """
-        %(class_name)s::%(class_name)s(ExtMachInst machInst):
-            %(base_class)s("%(mnemonic)s", machInst, No_OpClass)
-        {
-            %(set_reg_idx_arr)s;
-        }
-        """ % iop,
-        
-        BasicDecode.subst(iop),
-        
-        """
-        Fault
-        %(class_name)s::execute(
-            ExecContext *xc, trace::InstRecord *traceData) const
-        {
-            // This is a hint instruction - no architectural state change
-            // The actual functionality is implemented in the base class
-            return NoFault;
-        }
-        """ % iop
-    )
-};
-
-// Zihintntl instruction definitions
-// These are HINT instructions with opcode 0x0F (SYSTEM) and funct3=0x0
-// Encoding: [31:25]=hint_type, [24:20]=0, [19:15]=0, [14:12]=0, [11:7]=0, [6:0]=0x0F
-
-// NTL.P1 - Non-Temporal Load Hint with locality level 1
-// encoding: 0x0000000F (hint_type=0)
-inst NTL_P1 : NTLHint {
-    mnemonic = "ntl.p1";
-    op = 0x0F;
-    funct3 = 0x0;
-    rs1 = 0x0;
-    rd = 0x0;
-    imm = 0x0;
-};
-
-// NTL.PALL - Non-Temporal Load Hint for all caches
-// encoding: 0x0020000F (hint_type=1)
-inst NTL_PALL : NTLHint {
-    mnemonic = "ntl.pall";
-    op = 0x0F;
-    funct3 = 0x0;
-    rs1 = 0x0;
-    rd = 0x0;
-    imm = 0x1;
-};
-
-// NTL.S1 - Non-Temporal Store Hint with locality level 1
-// encoding: 0x0040000F (hint_type=2)
-inst NTL_S1 : NTLHint {
-    mnemonic = "ntl.s1";
-    op = 0x0F;
-    funct3 = 0x0;
-    rs1 = 0x0;
-    rd = 0x0;
-    imm = 0x2;
-};
-
-// NTL.ALL - Non-Temporal Hint for all subsequent accesses
-// encoding: 0x0060000F (hint_type=3)
-inst NTL_ALL : NTLHint {
-    mnemonic = "ntl.all";
-    op = 0x0F;
-    funct3 = 0x0;
-    rs1 = 0x0;
-    rd = 0x0;
-    imm = 0x3;
-};
+def format NTLHint(code, *flags) {{
+    iop = InstObjParams(name, Name, 'RiscvStaticInst', code, flags)
+    header_output = BasicDeclare.subst(iop)
+    decoder_output = BasicConstructor.subst(iop)
+    decode_block = BasicDecode.subst(iop)
+    exec_output = """
+    Fault
+    %(class_name)s::execute(ExecContext *xc,
+        trace::InstRecord *traceData) const
+    {
+        // This is a HINT instruction - no architectural state change
+        // Just return NoFault
+        return NoFault;
+    }
+    """ % iop
+}};

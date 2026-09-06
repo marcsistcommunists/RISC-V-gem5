@@ -71,7 +71,7 @@ class NTL_P1 : public NTLInst
         : NTLInst("ntl.p1", _machInst, No_OpClass)
     {}
 
-    Fault execute(ExecContext *xc, Trace::InstRecord *traceData) const override;
+    Fault execute(ExecContext *xc, trace::InstRecord *traceData) const override;
 };
 
 /**
@@ -85,7 +85,7 @@ class NTL_PALL : public NTLInst
         : NTLInst("ntl.pall", _machInst, No_OpClass)
     {}
 
-    Fault execute(ExecContext *xc, Trace::InstRecord *traceData) const override;
+    Fault execute(ExecContext *xc, trace::InstRecord *traceData) const override;
 };
 
 /**
@@ -100,7 +100,7 @@ class NTL_S1 : public NTLInst
         : NTLInst("ntl.s1", _machInst, No_OpClass)
     {}
 
-    Fault execute(ExecContext *xc, Trace::InstRecord *traceData) const override;
+    Fault execute(ExecContext *xc, trace::InstRecord *traceData) const override;
 };
 
 /**
@@ -115,7 +115,7 @@ class NTL_ALL : public NTLInst
         : NTLInst("ntl.all", _machInst, No_OpClass)
     {}
 
-    Fault execute(ExecContext *xc, Trace::InstRecord *traceData) const override;
+    Fault execute(ExecContext *xc, trace::InstRecord *traceData) const override;
 };
 
 } // namespace RiscvISA
