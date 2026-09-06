@@ -56,8 +56,6 @@ NTL_P1::execute(ExecContext *xc, trace::InstRecord *traceData) const
     // This is a hint instruction that suggests the next load should be
     // treated as non-temporal with lowest cache priority.
     
-    DPRINTF(RiscvNtl, "Executing NTL.P1 at PC=%#x\n", xc->pcState().pc());
-    
     // Set non-temporal flag for subsequent memory access
     // This will be picked up by load instructions
     xc->setMiscReg(MISCREG_NTL_HINT, 1); // Locality level 1
@@ -71,8 +69,6 @@ NTL_PALL::execute(ExecContext *xc, trace::InstRecord *traceData) const
     // NTL.PALL - Non-Temporal Load Hint for all caches
     // Suggests that data should bypass all cache levels
     
-    DPRINTF(RiscvNtl, "Executing NTL.PALL at PC=%#x\n", xc->pcState().pc());
-    
     // Set non-temporal flag for all cache levels
     xc->setMiscReg(MISCREG_NTL_HINT, 2); // All caches
     
@@ -84,8 +80,6 @@ NTL_S1::execute(ExecContext *xc, trace::InstRecord *traceData) const
 {
     // NTL.S1 - Non-Temporal Store Hint with locality level 1
     // Suggests that store data will not be reused and should bypass cache
-    
-    DPRINTF(RiscvNtl, "Executing NTL.S1 at PC=%#x\n", xc->pcState().pc());
     
     // Set non-temporal flag for subsequent store
     xc->setMiscReg(MISCREG_NTL_HINT, 3); // Store hint level 1
@@ -99,8 +93,6 @@ NTL_ALL::execute(ExecContext *xc, trace::InstRecord *traceData) const
     // NTL.ALL - Non-Temporal Hint for all subsequent accesses
     // Sets a persistent mode where all subsequent memory accesses 
     // are treated as non-temporal until changed
-    
-    DPRINTF(RiscvNtl, "Executing NTL.ALL at PC=%#x\n", xc->pcState().pc());
     
     // Set persistent non-temporal mode
     xc->setMiscReg(MISCREG_NTL_HINT, 4); // Persistent mode
