@@ -1342,6 +1342,18 @@ decode QUADRANT default Unknown::unknown() {
                     IsSquashAfter, No_OpClass);
             }
 
+            // Zihintntl - Non-Temporal Load/Store Hint
+            0x4: decode RS1 {
+                0x0: decode RD {
+                    0x0: decode IMM12 {
+                        0x0: NTL_P1::ntl_p1({{}}, IsSerializeAfter);
+                        0x1: NTL_PALL::ntl_pall({{}}, IsSerializeAfter);
+                        0x2: NTL_S1::ntl_s1({{}}, IsSerializeAfter);
+                        0x3: NTL_ALL::ntl_all({{}}, IsSerializeAfter);
+                    }
+                }
+            }
+
             0x2: decode RD {
                 0x0: decode FUNCT12 {
                     format CBMOp {
