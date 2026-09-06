@@ -284,6 +284,8 @@ const std::array<const char *, NUM_MISCREGS> MiscRegNames = {{
 
     [MISCREG_JVT] = "JVT",
 
+    [MISCREG_NTL_HINT] = "NTL_HINT",
+
     [MISCREG_FFLAGS_EXE]    = "FFLAGS_EXE",
 }};
 

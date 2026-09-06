@@ -71,14 +71,14 @@ Load::applyNTLHint(ExecContext *xc, Request::Flags &flags) const
 {
     // Check if NTL hint is set for loads
     uint64_t ntlHint = 0;
-    if (xc->readMiscReg(MISCREG_NTL_HINT, 0)) {
-        ntlHint = xc->readMiscReg(MISCREG_NTL_HINT, 0);
+    if (xc->readMiscReg(MISCREG_NTL_HINT)) {
+        ntlHint = xc->readMiscReg(MISCREG_NTL_HINT);
     }
     
     // NTL.P1 (value 1) and NTL.PALL (value 2) affect loads
     // NTL.ALL (value 4) affects all subsequent accesses
     if (ntlHint == 1 || ntlHint == 2 || ntlHint == 4) {
-        flags |= Request::NON_TEMPORAL;
+        flags.set(Request::NON_TEMPORAL);
         
         // Clear the hint after using it (for one-shot hints like NTL.P1, NTL.PALL, NTL.S1)
         // NTL.ALL (value 4) should persist, so we don't clear it
@@ -93,13 +93,13 @@ Store::applyNTLHint(ExecContext *xc, Request::Flags &flags) const
 {
     // Check if NTL hint is set for stores
     uint64_t ntlHint = 0;
-    if (xc->readMiscReg(MISCREG_NTL_HINT, 0)) {
-        ntlHint = xc->readMiscReg(MISCREG_NTL_HINT, 0);
+    if (xc->readMiscReg(MISCREG_NTL_HINT)) {
+        ntlHint = xc->readMiscReg(MISCREG_NTL_HINT);
     }
     
     // NTL.S1 (value 3) and NTL.ALL (value 4) affect stores
     if (ntlHint == 3 || ntlHint == 4) {
-        flags |= Request::NON_TEMPORAL;
+        flags.set(Request::NON_TEMPORAL);
         
         // Clear the hint after using it (for one-shot hints like NTL.S1)
         // NTL.ALL (value 4) should persist, so we don't clear it
