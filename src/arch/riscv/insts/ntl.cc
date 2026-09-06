@@ -50,7 +50,7 @@ NTLInst::generateDisassembly(Addr pc, const loader::SymbolTable *symtab) const
 }
 
 Fault
-NTL_P1::execute(ExecContext *xc, Trace::InstRecord *traceData) const
+NTL_P1::execute(ExecContext *xc, trace::InstRecord *traceData) const
 {
     // NTL.P1 - Non-Temporal Load Hint with locality level 1
     // This is a hint instruction that suggests the next load should be
@@ -66,7 +66,7 @@ NTL_P1::execute(ExecContext *xc, Trace::InstRecord *traceData) const
 }
 
 Fault
-NTL_PALL::execute(ExecContext *xc, Trace::InstRecord *traceData) const
+NTL_PALL::execute(ExecContext *xc, trace::InstRecord *traceData) const
 {
     // NTL.PALL - Non-Temporal Load Hint for all caches
     // Suggests that data should bypass all cache levels
@@ -80,7 +80,7 @@ NTL_PALL::execute(ExecContext *xc, Trace::InstRecord *traceData) const
 }
 
 Fault
-NTL_S1::execute(ExecContext *xc, Trace::InstRecord *traceData) const
+NTL_S1::execute(ExecContext *xc, trace::InstRecord *traceData) const
 {
     // NTL.S1 - Non-Temporal Store Hint with locality level 1
     // Suggests that store data will not be reused and should bypass cache
@@ -94,7 +94,7 @@ NTL_S1::execute(ExecContext *xc, Trace::InstRecord *traceData) const
 }
 
 Fault
-NTL_ALL::execute(ExecContext *xc, Trace::InstRecord *traceData) const
+NTL_ALL::execute(ExecContext *xc, trace::InstRecord *traceData) const
 {
     // NTL.ALL - Non-Temporal Hint for all subsequent accesses
     // Sets a persistent mode where all subsequent memory accesses 
