@@ -36,7 +36,6 @@
 #include "arch/riscv/regs/misc.hh"
 #include "arch/riscv/utility.hh"
 #include "cpu/static_inst.hh"
-#include "debug/RiscvNtl.hh"
 
 namespace gem5
 {
@@ -79,7 +78,6 @@ Load::applyNTLHint(ExecContext *xc, Request::Flags &flags) const
     // NTL.P1 (value 1) and NTL.PALL (value 2) affect loads
     // NTL.ALL (value 4) affects all subsequent accesses
     if (ntlHint == 1 || ntlHint == 2 || ntlHint == 4) {
-        DPRINTF(RiscvNtl, "Applying NTL hint to load: hint=%lu\\n", ntlHint);
         flags |= Request::NON_TEMPORAL;
         
         // Clear the hint after using it (for one-shot hints like NTL.P1, NTL.PALL, NTL.S1)
@@ -101,7 +99,6 @@ Store::applyNTLHint(ExecContext *xc, Request::Flags &flags) const
     
     // NTL.S1 (value 3) and NTL.ALL (value 4) affect stores
     if (ntlHint == 3 || ntlHint == 4) {
-        DPRINTF(RiscvNtl, "Applying NTL hint to store: hint=%lu\\n", ntlHint);
         flags |= Request::NON_TEMPORAL;
         
         // Clear the hint after using it (for one-shot hints like NTL.S1)
